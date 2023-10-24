@@ -18,7 +18,12 @@ score1El.textContent = 0
 let score = [0, 0]
 let currentScore = 0
 let currentPlayer = 0
-//let clicks = 0
+
+//functia de count a click-urilor pe btnRoll
+let clicks = 0
+btnRoll.addEventListener('click', function(){
+    clicks++
+})
 
 // switch player functionality
 function switchPlayer() {
@@ -33,19 +38,22 @@ function switchPlayer() {
 btnRoll.addEventListener('click', function () {
 	//1 generate random number
 	const dice = Math.trunc(Math.random() * 6) + 1
-	// 1.5 counting the clicks
-	//  clicks ++
 	//2 display correct image
 	diceEl.classList.remove('hidden')
 	diceEl.src = `/src/dice-${dice}.png`
 	// chekc if it's 1
 	if (dice === 1) {
 		//switch player
+		clicks = 0
 		switchPlayer()
-	}/*else if (clicks >= 3) {
+	}else if (clicks > 2) {
 		currentScore += dice
 		document.getElementById(`current--${currentPlayer}`).textContent = currentScore
-	}*/ else {
+		score[currentPlayer] += currentScore
+		document.getElementById(`score--${currentPlayer}`).textContent = score[currentPlayer]
+		switchPlayer()
+		clicks = 0
+	} else {
 		//adaugam scorul
 		currentScore += dice
 		document.getElementById(`current--${currentPlayer}`).textContent = currentScore
@@ -58,6 +66,7 @@ btnHold.addEventListener('click', function () {
 	score[currentPlayer] += currentScore
 	document.getElementById(`score--${currentPlayer}`).textContent = score[currentPlayer]
 	// switch player
+	clicks = 0
 	switchPlayer()
 	//2 check if win (score >= 100)
 	if (score[currentPlayer] >= 100) {
@@ -65,6 +74,17 @@ btnHold.addEventListener('click', function () {
 	}
 })
 
-
-
 // New game
+btnNew.addEventListener('click', function(){
+	score0El.textContent = 0
+	score1El.textContent = 0
+	score = [0, 0]
+	currentScore = 0
+	currentPlayer = 0
+	diceEl.classList.add('hidden')
+	player0El.classList.add('player--active')
+	player1El.classList.remove('player--active')
+	current0El.textContent = currentScore
+	current1El.textContent = currentScore
+	clicks = 0
+})
