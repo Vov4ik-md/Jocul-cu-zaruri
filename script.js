@@ -17,12 +17,7 @@ score1El.textContent = 0
 let score = [0, 0]
 let currentScore = 0
 let currentPlayer = 0
-
-//functia de count a click-urilor pe btnRoll
 let clicks = 0
-btnRoll.addEventListener('click', function(){
-	clicks++
-})
 
 // switch player functionality
 function switchPlayer() {
@@ -37,6 +32,7 @@ function switchPlayer() {
 // Rolling the dice
 btnRoll.addEventListener('click', function () {
 	//1 generate random number
+	clicks++
 	const dice = Math.trunc(Math.random() * 6) + 1
 	//2 display correct image
 	diceEl.classList.remove('hidden')
