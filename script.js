@@ -6,13 +6,13 @@ const score1El = document.getElementById('score--1')
 const current0El = document.getElementById('current--0')
 const current1El = document.getElementById('current--1')
 const diceEl = document.querySelector('.dice')
+
 //buttons
 const btnNew = document.querySelector('.btn--new')
 const btnRoll = document.querySelector('.btn--roll')
 const btnHold = document.querySelector('.btn--hold')
 
 //declaram var globale
-
 let score,currentScore,currentPlayer,clicks,activeGame
 
 // Initial conditions
@@ -32,7 +32,6 @@ function init() {
 }
 
 init()
-
 // switch player functionality
 function switchPlayer() {
 	currentScore = 0
@@ -63,7 +62,6 @@ function addScore() {
 		}
 	}
 }
-
 // Rolling the dice
 btnRoll.addEventListener('click', function () {
 	if (activeGame) {
@@ -88,9 +86,7 @@ btnRoll.addEventListener('click', function () {
 		}
 	}
 })
-
 // Hold functionality
 btnHold.addEventListener('click', addScore)
-
 // New game
 btnNew.addEventListener('click', init)
