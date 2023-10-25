@@ -10,74 +10,87 @@ const diceEl = document.querySelector('.dice')
 const btnNew = document.querySelector('.btn--new')
 const btnRoll = document.querySelector('.btn--roll')
 const btnHold = document.querySelector('.btn--hold')
-// Initial conditions
-score0El.textContent = 0
-score1El.textContent = 0
 
-let score = [0, 0]
-let currentScore = 0
-let currentPlayer = 0
-let clicks = 0
+//declaram var globale
+
+let score,currentScore,currentPlayer,clicks,activeGame
+
+// Initial conditions
+function init() {
+	score0El.textContent = 0
+	score1El.textContent = 0
+	current0El.textContent = 0
+	current1El.textContent = 0
+	score = [0, 0]
+	currentScore = 0
+	currentPlayer = 0
+	clicks = 0
+	activeGame = true
+	player1El.classList.remove('player--winner','player--active')
+	player0El.classList.remove('player--winner')
+	player0El.classList.add('player--active')
+}
+
+init()
 
 // switch player functionality
 function switchPlayer() {
 	currentScore = 0
-	clicks = 0;
+	clicks = 0
 	player0El.classList.toggle('player--active')
 	player1El.classList.toggle('player--active')
 	document.getElementById(`current--${currentPlayer}`).textContent = currentScore
 	currentPlayer == 1 ? currentPlayer = 0 : currentPlayer =  1
 }
+function addScore() {
+	if (activeGame) {
+		//1 add current score to player score
+		score[currentPlayer] += currentScore
+		document.getElementById(`score--${currentPlayer}`).textContent = score[currentPlayer]
+		// switch player
+		//2 check if win (score >= 100)
+		if (score[currentPlayer] >= 20) {
+			document.querySelector('.player--active').classList.add('player--winner')
+			diceEl.classList.add('hidden')
+			activeGame = false
+			// ca sa facem butonul neactiv
+			//btnRoll.setAttribute('disabled', true)
+			/* sau atribuim clasa 'hidden'
+			btnRoll.classList.add('hidden')
+			btnHold.classList.add('hidden')*/
+		} else {
+			switchPlayer()
+		}
+	}
+}
 
 // Rolling the dice
 btnRoll.addEventListener('click', function () {
-	//1 generate random number
-	clicks++
-	const dice = Math.trunc(Math.random() * 6) + 1
-	//2 display correct image
-	diceEl.classList.remove('hidden')
-	diceEl.src = `/src/dice-${dice}.png`
-	// chekc if it's 1
-	if (dice === 1) {
-		//switch player
-		switchPlayer()
-	}else if (clicks > 2) {
-		currentScore += dice
-		document.getElementById(`current--${currentPlayer}`).textContent = currentScore
-		score[currentPlayer] += currentScore
-		document.getElementById(`score--${currentPlayer}`).textContent = score[currentPlayer]
-		switchPlayer()
-	} else {
-		//adaugam scorul
-		currentScore += dice
-		document.getElementById(`current--${currentPlayer}`).textContent = currentScore
+	if (activeGame) {
+		//1 generate random number
+		clicks++
+		const dice = Math.trunc(Math.random() * 6) + 1
+		//2 display correct image
+		diceEl.classList.remove('hidden')
+		diceEl.src = `/src/dice-${dice}.png`
+		// chekc if it's 1
+		if (dice === 1) {
+			//switch player
+			switchPlayer()
+		} else if (clicks > 2) {
+			currentScore += dice
+			document.getElementById(`current--${currentPlayer}`).textContent = currentScore
+			addScore()
+		} else {
+			//adaugam scorul
+			currentScore += dice
+			document.getElementById(`current--${currentPlayer}`).textContent = currentScore
+		}
 	}
 })
 
 // Hold functionality
-btnHold.addEventListener('click', function () {
-	//1 add current score to player score
-	score[currentPlayer] += currentScore
-	document.getElementById(`score--${currentPlayer}`).textContent = score[currentPlayer]
-	// switch player
-	switchPlayer()
-	//2 check if win (score >= 100)
-	if (score[currentPlayer] >= 100) {
-		document.querySelector('.player--active').classList.add('player--winner')
-	}
-})
+btnHold.addEventListener('click', addScore)
 
 // New game
-btnNew.addEventListener('click', function(){
-	score0El.textContent = 0
-	score1El.textContent = 0
-	score = [0, 0]
-	currentScore = 0
-	currentPlayer = 0
-	diceEl.classList.add('hidden')
-	player0El.classList.add('player--active')
-	player1El.classList.remove('player--active')
-	current0El.textContent = currentScore
-	current1El.textContent = currentScore
-	clicks = 0
-})
+btnNew.addEventListener('click', init)
